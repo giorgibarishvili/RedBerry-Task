@@ -1,0 +1,29 @@
+.filter {
+  display: flex;
+  width: 785px;
+  height: 47px;
+  border-radius: 10px;
+  border: 1px solid #dbdbdb;
+  padding: 6px;
+  align-items: center;
+  justify-content: space-around;
+}
+.param-item {
+  font-size: 14px;
+  color: #354451;
+  border: 1px solid #dbdbdb;
+  border-radius: 15px;
+  width: fit-content;
+  padding: 6px 10px 6px 10px;
+  height: 29px;
+  gap: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-clear{
+  color: #021526;
+  font-weight: 600;
+  border: none;
+  background: none;
+}
