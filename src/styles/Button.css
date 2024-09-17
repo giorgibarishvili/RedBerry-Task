@@ -18,3 +18,10 @@
   color: #ffffff;
   background-color: #f93b1d;
 }
+.btn-delete {
+  border: 1px solid #676e76;
+  color: #676e76;
+  width: 140px;
+  height: 35px;
+  font-size: 12px;
+}

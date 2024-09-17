@@ -1,0 +1,36 @@
+.main-img {
+  border-radius: 14px 14px 0px 0px;
+  width: 840px;
+  height: 670px;
+}
+
+.listing-params {
+  display: grid;
+  justify-items: start;
+  color: #808a93;
+}
+
+.listing-params span {
+  text-align: left;
+  width: 500px;
+  height: 80px;
+}
+.agent-card {
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  width: 500px;
+  height: 175px;
+  color: #808a93;
+}
+.agent-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
+.agent-nametag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}

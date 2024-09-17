@@ -8,7 +8,7 @@ function Card({ picture, status, price, address, beds, area, post }) {
     <div className="product-card mt-5 me-4 p-0">
       <div className="product-img">
         <img src={picture} alt="Product" />
-        <div className="img-logo">{status}</div>
+        <div className="img-status">{status}</div>
       </div>
       <div className="product-content">
         <h3>{price} ₾</h3>
