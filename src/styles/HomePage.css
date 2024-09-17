@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-around;
 }
+
 .param-item {
   font-size: 14px;
   color: #354451;
@@ -21,9 +22,63 @@
   align-items: center;
   justify-content: center;
 }
-.btn-clear{
+
+.btn-clear {
   color: #021526;
   font-weight: 600;
   border: none;
   background: none;
+}
+
+.filter-item {
+  cursor: pointer;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.filter-item svg {
+  transition: transform 0.3s ease-in-out;
+}
+
+.default-filter {
+  top: 250px;
+  border-radius: 10px;
+  border: 1px solid #dbdbdb;
+  padding: 24px;
+  gap: 32px;
+  z-index: 100;
+  position: absolute;
+  background-color: #fff;
+}
+
+.region-filter {
+  width: 731px;
+  height: 284px;
+}
+
+.price-filter {
+  width: 382px;
+  height: 450px;
+}
+
+.beds-filter {
+  width: 350px;
+  height: 192px;
+}
+
+.beds-counter {
+  border: 1px solid #02152666;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: #02152666;
+  background-color: #ffffff;
+}
+
+.row-column {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
 }

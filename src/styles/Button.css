@@ -1,0 +1,20 @@
+.btn-default {
+  border-radius: 10px;
+  padding: 10px 16px;
+  gap: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-add {
+  border: 1px solid #f93b1d;
+  width: 230px;
+  height: 47px;
+}
+.btn-choose {
+  border: 1px solid #f93b1d;
+  width: 77px;
+  height: 33px;
+  color: #ffffff;
+  background-color: #f93b1d;
+}

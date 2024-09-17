@@ -12,3 +12,7 @@ body {
 .form-floating {
   color: #212529;
 } */
+.form-check-input:checked {
+  background-color: #45A849;
+  border-color: #45A849;
+}
