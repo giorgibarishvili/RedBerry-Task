@@ -6,10 +6,14 @@ import Card from "../Card";
 import House from "../../images/image.png";
 import { useEffect, useRef, useState } from "react";
 import CheckBox from "../CheckBox";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../../store/redBerryRedux/actions";
 
 function HomePage() {
   const dropdownRef = useRef(null);
   const filterRefs = useRef([]);
+  const dispatch = useDispatch();
+  const cities = useSelector((state) => state.redBerry.cities);
 
   const [region, setRegion] = useState(false);
   const [price, setPrice] = useState(false);
@@ -44,6 +48,10 @@ function HomePage() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    dispatch(actions.getCities());
+  }, [dispatch]);
+  console.log(cities);
 
   return (
     <div className=" container mt-5">
@@ -160,7 +168,7 @@ function HomePage() {
           >
             <h4>ფასის მიხედვით</h4>
             <div className=" row mt-2" style={{ width: "332" }}>
-              <div className="form-floating input-frame pb-5 col-6 row-column">
+              <div className="form-floating   pb-5 col-6 row-column">
                 <input
                   type="text"
                   className={`form-control${!priceFrom ? " is-invalid" : ""}`}
@@ -184,7 +192,7 @@ function HomePage() {
                 <div>50,000 ₾</div>
                 <div>50,000 ₾</div>
               </div>
-              <div className="form-floating input-frame pb-5 col-6 row-column">
+              <div className="form-floating   pb-5 col-6 row-column">
                 <input
                   type="text"
                   className={`form-control${!priceTo ? " is-invalid" : ""}`}
@@ -229,7 +237,7 @@ function HomePage() {
           >
             <h4>ფართობის მიხედვით</h4>
             <div className=" row mt-2" style={{ width: "332" }}>
-              <div className="form-floating input-frame pb-5 col-6 row-column">
+              <div className="form-floating   pb-5 col-6 row-column">
                 <input
                   type="text"
                   className={`form-control${!areaFrom ? " is-invalid" : ""}`}
@@ -253,7 +261,7 @@ function HomePage() {
                 <div>50,000 მ²</div>
                 <div>50,000 მ²</div>
               </div>
-              <div className="form-floating input-frame pb-5 col-6 row-column">
+              <div className="form-floating   pb-5 col-6 row-column">
                 <input
                   type="text"
                   className={`form-control${!areaTo ? " is-invalid" : ""}`}

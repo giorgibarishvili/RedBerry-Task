@@ -1,4 +1,6 @@
 const CONSTANTS = {
+  GET_CITIES: "GET_CITIES",
+  SET_CITIES: "SET_CITIES",
 
 };
 
