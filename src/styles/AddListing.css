@@ -14,3 +14,19 @@
   display: grid;
   justify-items: start;
 }
+.add-photo {
+  width: 788px;
+  height: 120px;
+  border: 1px dotted #021526;
+}
+.listing-input {
+  width: 384px;
+  height: 45px;
+}
+.listing-text-area{
+  width: 788px;
+  border: 1px solid #021526;
+}
+.form-floating > .form-control.listing-text-area {
+  height: 120px; 
+}

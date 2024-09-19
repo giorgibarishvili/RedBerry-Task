@@ -1,8 +1,8 @@
-function TextArea({ label, state, setState }) {
+function TextArea({ label, state, setState, className }) {
   return (
     <div className="form-floating input-frame pb-3">
       <textarea
-        className={`input-field textarea form-floating form-control ${
+        className={`input-field textarea form-floating form-control ${className} ${
           !state ? " is-invalid" : ""
         }`}
         id="floatingInput"

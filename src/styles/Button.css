@@ -6,11 +6,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .btn-add {
   border: 1px solid #f93b1d;
   width: 230px;
   height: 47px;
 }
+
 .btn-choose {
   border: 1px solid #f93b1d;
   width: 77px;
@@ -18,10 +20,26 @@
   color: #ffffff;
   background-color: #f93b1d;
 }
+
 .btn-delete {
   border: 1px solid #676e76;
   color: #676e76;
   width: 140px;
   height: 35px;
   font-size: 12px;
+}
+
+.btn-cancel {
+  border: 1px solid #f93b1d;
+  width: 100px;
+  height: 45px;
+  color: #f93b1d;
+  background-color: #ffffff;
+}
+.btn-create{
+  border: 1px solid #f93b1d;
+  width: 190px;
+  height: 45px;
+  color: #ffffff;
+  background-color: #f93b1d;
 }
