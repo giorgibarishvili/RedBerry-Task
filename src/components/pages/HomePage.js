@@ -4,16 +4,23 @@ import { ReactComponent as Xmark } from "../../images/xmark-solid.svg";
 import ButtonAdd from "../ButtonAdd";
 import Card from "../Card";
 import House from "../../images/image.png";
-import { useEffect, useRef, useState } from "react";
+import { act, useEffect, useRef, useState } from "react";
 import CheckBox from "../CheckBox";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
+import { Link, useNavigate } from "react-router-dom";
 
 function HomePage() {
   const dropdownRef = useRef(null);
   const filterRefs = useRef([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const cities = useSelector((state) => state.redBerry.cities);
+  const regions = useSelector((state) => state.redBerry.regions);
+  const realEstates = useSelector((state) => state.redBerry.realEstates);
+  const agents = useSelector((state) => state.redBerry.agents);
+  const filteredList = useSelector((state) => state.redBerry.filteredList);
 
   const [region, setRegion] = useState(false);
   const [price, setPrice] = useState(false);
@@ -24,8 +31,20 @@ function HomePage() {
   const [areaFrom, setAreaFrom] = useState("");
   const [areaTo, setAreaTo] = useState("");
   const [activeFilter, setActiveFilter] = useState(null);
+
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
+  };
+  const setRegionsFilter = () => {
+    dispatch(
+      actions.setFilters({
+        regions: regions
+          .filter(({ isSelected }) => isSelected)
+          .map(({ id }) => id),
+      })
+    );
+    dispatch(actions.setFilteredList());
+    console.log(regions);
   };
 
   useEffect(() => {
@@ -49,9 +68,12 @@ function HomePage() {
     };
   }, []);
   useEffect(() => {
+    dispatch(actions.getRegions());
+    dispatch(actions.getRealEstates());
     dispatch(actions.getCities());
+    dispatch(actions.getAgents());
   }, [dispatch]);
-  console.log(cities);
+  // console.log(realEstates);
 
   return (
     <div className=" container mt-5">
@@ -128,36 +150,34 @@ function HomePage() {
             className="region-filter default-filter d-flex flex-column align-items-start"
           >
             <h4>რეგიონის მიხედვით</h4>
-            <div className=" row mt-2" style={{ width: "681px" }}>
-              <div className="col-4 row-column">
-                <CheckBox text="ქართლი" />
-                <CheckBox text="კახეთი" />
-                <CheckBox text="იმერეთი" />
-                <CheckBox text="სამეგრელო" />
-              </div>
-              <div className="col-4 row-column">
-                <CheckBox text="გურია" />
-                <CheckBox text="რაჭა" />
-                <CheckBox text="ლეჩხუმი" />
-                <CheckBox text="სამცხე-ჯავახეთი" />
-              </div>
-              <div className="col-4 row-column">
-                <CheckBox text="აჭარა" />
-                <CheckBox text="სვანეთი" />
-                <CheckBox text="მცხეთა-მთიანეთი" />
-                <CheckBox text="თბილისი" />
-              </div>
-              <div className="d-flex justify-content-end">
-                <button
-                  className="btn-default btn-choose mx-3"
-                  onClick={() => {
-                    setRegion(false);
-                    handleClick(null);
+            <div className="checkbox-container">
+              {regions.map((item) => (
+                <CheckBox
+                  change={(e) => {
+                    dispatch(
+                      actions.updateRegion({
+                        id: item.id,
+                        isSelected: e.target.checked,
+                      })
+                    );
                   }}
-                >
-                  არჩევა
-                </button>
-              </div>
+                  key={item.id}
+                  text={item.name}
+                  isSelected={item.isSelected}
+                />
+              ))}
+            </div>
+            <div className="d-flex justify-content-end ms-auto">
+              <button
+                className="btn-default btn-choose mx-3"
+                onClick={() => {
+                  setRegion(false);
+                  handleClick(null);
+                  setRegionsFilter();
+                }}
+              >
+                არჩევა
+              </button>
             </div>
           </div>
         )}
@@ -334,15 +354,20 @@ function HomePage() {
         </div>
       </div>
       <div className="row justify-content-start">
-        <Card
-          picture={House}
-          status="იყიდება"
-          price="80 000"
-          address="თბილისი, ი. ჭავჭავაძის 53"
-          beds="2"
-          area="55"
-          post="0131"
-        />
+        {filteredList.map((item) => (
+          <Link className="card-link" key={item.id} to={`/listing/${item.id}`}>
+            <Card
+              key={item.id}
+              picture={item.image}
+              status={item.is_rental}
+              price={item.price}
+              address={item.address}
+              beds={item.bedrooms}
+              area={item.area}
+              post={item.zip_code}
+            />
+          </Link>
+        ))}
       </div>
     </div>
   );

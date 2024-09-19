@@ -47,7 +47,7 @@
   border-radius: 10px;
   border: 1px solid #dbdbdb;
   padding: 24px;
-  gap: 32px;
+  gap: 16px;
   z-index: 100;
   position: absolute;
   background-color: #fff;
@@ -81,4 +81,15 @@
   display: grid;
   justify-items: start;
   gap: 10px;
+}
+.checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 681px;
+  justify-items: start;
+}
+
+.card-link {
+  display: contents;
 }

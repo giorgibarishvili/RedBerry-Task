@@ -8,10 +8,12 @@ function Card({ picture, status, price, address, beds, area, post }) {
     <div className="product-card mt-5 me-4 p-0">
       <div className="product-img">
         <img src={picture} alt="Product" />
-        <div className="img-status">{status}</div>
+        <div className="img-status">
+          {status === 0 ? "იყიდება" : "ქირავდება"}
+        </div>
       </div>
       <div className="product-content">
-        <h3>{price} ₾</h3>
+        <h3 style={{ color: "#021526" }}>{price} ₾</h3>
         <div className="gap-2 d-flex">
           <LocPin /> {address}
         </div>

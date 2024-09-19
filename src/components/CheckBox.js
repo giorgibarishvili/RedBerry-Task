@@ -1,4 +1,4 @@
-function CheckBox({ text }) {
+function CheckBox({ text, change, isSelected }) {
   return (
     <div className="form-check checkbox-wrapper">
       <input
@@ -6,6 +6,8 @@ function CheckBox({ text }) {
         type="checkbox"
         value=""
         id="flexCheckDefault"
+        onChange={change}
+        checked={isSelected}
       />
       <label className="form-check-label" htmlFor="flexCheckDefault">
         {text}

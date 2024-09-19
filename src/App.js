@@ -10,7 +10,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" exact Component={HomePage} />
-        <Route path="/listing" Component={ListingPage} />
+        <Route path="/listing/:id" element={<ListingPage />} />
         <Route path="/add-listing" Component={AddListing} />
       </Routes>
     </Router>
