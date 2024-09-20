@@ -33,8 +33,20 @@ const reducer = createReducer(initState, (builder) =>
     })
     .addCase(CONSTANTS.SET_FILTERS, (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
+
+      // { regions: [1,2,3 ] }
       // console.log(state.filters);
     })
+    .addCase(CONSTANTS.CLEAR_FILTERS, (state) => {
+      state.filters = {};
+    })
+        // .addCase(CONSTANTS.REMOVE_FILTER, (state, action) => {
+
+          // which filter
+        // delete state.filters.regions
+    //   state.filters = {};
+    // })
+  
     .addCase(CONSTANTS.SET_FILTERED_LIST, (state) => {
       // TO-DO if logics
       if (!state.filters.regions?.length) {

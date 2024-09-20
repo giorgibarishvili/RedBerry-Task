@@ -21,6 +21,7 @@ function HomePage() {
 
   const regions = useSelector((state) => state.redBerry.regions);
   const filteredList = useSelector((state) => state.redBerry.filteredList);
+  const filters = useSelector((state) => state.redBerry.filters);
 
   const [region, setRegion] = useState(false);
   const [price, setPrice] = useState(false);
@@ -50,7 +51,7 @@ function HomePage() {
       setAgentAvatar(file);
     }
   };
-  const handleCreateAgent = () =>{
+  const handleCreateAgent = () => {
     dispatch(
       actions.getCreateAgent({
         name: agentName,
@@ -60,7 +61,7 @@ function HomePage() {
         avatar: agentAvatar,
       })
     );
-  }
+  };
 
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
@@ -118,8 +119,10 @@ function HomePage() {
   }, [areaFrom, areaTo]);
 
   const selectedRegions = useMemo(() => {
-    return regions.filter(region => region.isSelected).map(region => region.name);
-  }, [regions]);
+    return regions
+      .filter((region) => filters?.regions?.indexOf(region.id) > -1)
+      .map((region) => region.name);
+  }, [filters, regions]);
 
   return (
     <div className=" container mt-5">
@@ -296,7 +299,7 @@ function HomePage() {
                       className="btn-default btn-create mx-3"
                       onClick={() => {
                         setAddAgent(false);
-                        handleCreateAgent()
+                        handleCreateAgent();
                       }}
                     >
                       დადასტურება
@@ -556,17 +559,25 @@ function HomePage() {
           </div>
         )}
         <div className="d-flex mt-3">
-        {selectedRegions.map((regionName, index) => (
-    <div key={index} className="param-item me-3">
-      {regionName}
-      <Xmark />
-    </div>
-  ))}
+          {selectedRegions.map((regionName, index) => (
+            <div key={index} className="param-item me-3">
+              {regionName}
+              <Xmark />
+            </div>
+          ))}
           <div className="param-item me-3">
             55 მ² - 90 მ²
             <Xmark />
           </div>
-          <button className="btn-clear">გასუფთავება</button>
+          <button
+            onClick={() => {
+              dispatch(actions.clearFilters());
+              dispatch(actions.setFilteredList());
+            }}
+            className="btn-clear"
+          >
+            გასუფთავება
+          </button>
         </div>
       </div>
       <div className="row justify-content-start">

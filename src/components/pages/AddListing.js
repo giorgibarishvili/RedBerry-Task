@@ -1,20 +1,94 @@
 import "../../styles/AddListing.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import TextArea from "../TextArea";
 import { ReactComponent as CirclePlus } from "../../images/circle-plus-solid.svg";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../../store/redBerryRedux/actions";
 
 function AddListing() {
-  const [sellStatus, setSellStatus] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const agents = useSelector((state) => state.redBerry.agents);
+  const cities = useSelector((state) => state.redBerry.cities);
+  const regions = useSelector((state) => state.redBerry.regions);
+
+  const [sellStatus, setSellStatus] = useState(0);
   const [address, setAddress] = useState("");
   const [postal, setPostal] = useState("");
   const [price, setPrice] = useState("");
   const [area, setArea] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [description, setDescription] = useState("");
+  const [agent, setAgent] = useState("");
+  const [city, setCity] = useState("");
+  const [region, setRegion] = useState("");
+  const [image, setImage] = useState(null);
 
-  const handleRadioChange = (e) => {
-    setSellStatus(e.target.value);
+  useEffect(() => {
+    dispatch(actions.getAgents());
+    dispatch(actions.getCities());
+    dispatch(actions.getRegions());
+  }, [dispatch]);
+
+  const handleRegionChange = (e) => {
+    const selectedRegion = e.target.value;
+    setRegion(selectedRegion);
+
+    const filteredCities = cities.filter(
+      (city) => city.region_id === parseInt(selectedRegion)
+    );
+    if (filteredCities.length > 0) {
+      setCity(filteredCities[0].id); 
+    } else {
+      setCity(""); 
+    }
+  };
+
+
+  useEffect(() => {
+    if (regions.length > 0) {
+      const firstRegionId = regions[0].id;
+      setRegion(firstRegionId); 
+
+      const filteredCities = cities.filter(
+        (city) => city.region_id === firstRegionId
+      );
+      if (filteredCities.length > 0) {
+        setCity(filteredCities[0].id); 
+      }
+    }
+  }, [regions,cities]);
+
+  const filteredCities = cities.filter(
+    (city) => city.region_id === parseInt(region)
+  );
+
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  const handleCreateAgent = () => {
+    dispatch(
+      actions.getCreateEstate({
+        address: address,
+        image: image,
+        region_id: region,
+        description: description,
+        city_id: city,
+        zip_code: postal,
+        price: price,
+        area: area,
+        bedrooms: bedrooms,
+        is_rental: sellStatus,
+        agent_id: agent,
+      })
+    );
   };
 
   return (
@@ -30,7 +104,7 @@ function AddListing() {
                 type="radio"
                 name="flexRadioDefault"
                 id="sell"
-                onChange={handleRadioChange}
+                onChange={() => setSellStatus(0)}
                 value="sell"
                 defaultChecked
               />
@@ -44,7 +118,7 @@ function AddListing() {
                 type="radio"
                 name="flexRadioDefault"
                 id="rent"
-                onChange={handleRadioChange}
+                onChange={() => setSellStatus(1)}
                 value="rent"
               />
               <label className="form-check-label" htmlFor="flexRadioDefault1">
@@ -82,24 +156,31 @@ function AddListing() {
               <span className="d-flex mb-2">რეგიონი</span>
               <select
                 className="form-select listing-input"
-                aria-label="Default select example"
+                aria-label="Select Region"
+                onChange={handleRegionChange}
+                value={region}
               >
-                <option selected>რეგიონი</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {regions.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="me-5">
               <span className="d-flex mb-2">ქალაქი</span>
               <select
                 className="form-select listing-input"
-                aria-label="Default select example"
+                aria-label="Select City"
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
               >
-                <option selected>ქალაქი</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {filteredCities.length > 0 &&
+                  filteredCities.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>
@@ -148,8 +229,32 @@ function AddListing() {
         <div className="info-section mt-5">
           <div className="mt-3 mb-2">ატვირთეთ ფოტო *</div>
           <div className="d-flex">
-            <div className="add-photo d-flex align-items-center justify-content-center">
-              <CirclePlus />
+            <input
+              type="file"
+              accept="image/*"
+              id="photo-upload"
+              style={{ display: "none" }}
+              onChange={handlePhotoUpload}
+            />
+            <div
+              className="add-photo d-flex align-items-center justify-content-center"
+              onClick={() => document.getElementById("photo-upload").click()}
+              style={{ cursor: "pointer" }}
+            >
+              {!image && <CirclePlus />}
+              {image && (
+                <div className="ml-2">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt="Agent Avatar"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -159,19 +264,30 @@ function AddListing() {
             <select
               className="form-select listing-input"
               aria-label="Default select example"
+              onChange={(e) => setAgent(e.target.value)}
             >
+              {agents.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name + " " + item.surname}
+                </option>
+              ))}
               <option selected>აირჩიე</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
             </select>
           </div>
         </div>
         <div className="d-flex justify-content-end ms-auto">
-          <button className="btn-default btn-cancel mx-3" onClick={() => {}}>
+          <button
+            className="btn-default btn-cancel mx-3"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
             გაუქმება
           </button>
-          <button className="btn-default btn-create mx-3" onClick={() => {}}>
+          <button
+            className="btn-default btn-create mx-3"
+            onClick={() => handleCreateAgent()}
+          >
             დაამატე ლისტინგი
           </button>
         </div>

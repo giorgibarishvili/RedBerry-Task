@@ -144,8 +144,39 @@ export function* getCreateAgent() {
 export function* getCreateEstate() {
   yield takeLatest(CONSTANTS.GET_CREATE_ESTATE, function* (action) {
     try {
+      const {
+        address,
+        image,
+        region_id,
+        description,
+        city_id,
+        zip_code,
+        price,
+        area,
+        bedrooms,
+        is_rental,
+        agent_id,
+      } = action.payload;
+      const formData = new FormData();
+      formData.append("address", address);
+      formData.append("region_id", region_id);
+      formData.append("description", description);
+      formData.append("city_id", city_id);
+      formData.append("zip_code", zip_code);
+      formData.append("price", price);
+      formData.append("area", area);
+      formData.append("bedrooms", bedrooms);
+      formData.append("is_rental", is_rental);
+      formData.append("agent_id", agent_id);
+      if (image) {
+        formData.append("image", image);
+      }
       const url = baseUrl + "real-estates";
-      const res = yield window.mainAxios.post(url, action.payload);
+      const res = yield window.mainAxios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       const data = res.data;
 
       if (!data || typeof data !== "object") {
@@ -166,8 +197,7 @@ export function* deleteEstate() {
       yield window.mainAxios.delete(url).then((r) => r.data);
 
       yield put(actions.removeEstate(action?.payload?.id));
-      yield put(actions.setFilteredList())
-      
+      yield put(actions.setFilteredList());
     } catch (e) {
       console.error(e);
     }
@@ -184,6 +214,6 @@ export default function* rootSaga() {
     fork(watchGetEstateById),
     fork(getCreateAgent),
     fork(getCreateEstate),
-    fork(deleteEstate)
+    fork(deleteEstate),
   ]);
 }

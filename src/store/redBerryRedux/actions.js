@@ -84,6 +84,10 @@ const actions = {
     type: CONSTANTS.REMOVE_ESTATE,
     payload,
   }),
+  clearFilters: (payload) => ({
+    type: CONSTANTS.CLEAR_FILTERS,
+    payload,
+  }),
 };
 
 export default actions;

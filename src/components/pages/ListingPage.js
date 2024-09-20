@@ -22,7 +22,6 @@ function ListingPage() {
   // const realEstates = useSelector((state) => state.redBerry.realEstates);
   const selectedEstate = useSelector((state) => state.redBerry.selectedEstate);
 
-  // const selectedRealEstate = realEstates.find((item) => item.id === Number(id));
   useEffect(() => {
     dispatch(actions.getEstateById({ id }));
   }, [dispatch, id]);
@@ -50,9 +49,12 @@ function ListingPage() {
   }, [modalRef]);
 
   if (!selectedEstate) {
-    return <div>Loading...</div>;
+    return <span
+    className="spinner-border spinner-border-sm"
+    role="status"
+    aria-hidden="true"
+  ></span>;
   }
-  console.log(selectedEstate);
 
   return (
     <div className="container mb-5">
