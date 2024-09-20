@@ -34,3 +34,11 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.corp-modal-x {
+  right: 0.7rem;
+  background: transparent;
+  border: none;
+  position: absolute;
+}
+
