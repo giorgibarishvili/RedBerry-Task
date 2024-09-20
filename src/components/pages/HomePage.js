@@ -3,14 +3,19 @@ import { ReactComponent as ArrowDown } from "../../images/chevron-down-solid.svg
 import { ReactComponent as Xmark } from "../../images/xmark-solid.svg";
 import ButtonAdd from "../ButtonAdd";
 import Card from "../Card";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CheckBox from "../CheckBox";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ModalPop from "../ModalPop";
+import Input from "../Input";
+import { ReactComponent as CirclePlus } from "../../images/circle-plus-solid.svg";
 
 function HomePage() {
+  const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const modalRef = useRef(null);
   const filterRefs = useRef([]);
   const dispatch = useDispatch();
 
@@ -26,11 +31,36 @@ function HomePage() {
   const [areaFrom, setAreaFrom] = useState("");
   const [areaTo, setAreaTo] = useState("");
   const [activeFilter, setActiveFilter] = useState(null);
+  const [addAgent, setAddAgent] = useState(false);
 
   const [priceFromError, setPriceFromError] = useState(false);
   const [priceToError, setPriceToError] = useState(false);
   const [areaFromError, setAreaFromError] = useState(false);
   const [areaToError, setAreaToError] = useState(false);
+
+  const [agentName, setAgentName] = useState("");
+  const [agentSurName, setAgentSurName] = useState("");
+  const [agentEmail, setAgentEmail] = useState("");
+  const [agentPhone, setAgentPhone] = useState("");
+  const [agentAvatar, setAgentAvatar] = useState(null);
+
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setAgentAvatar(file);
+    }
+  };
+  const handleCreateAgent = () =>{
+    dispatch(
+      actions.getCreateAgent({
+        name: agentName,
+        surname: agentSurName,
+        email: agentEmail,
+        phone: agentPhone,
+        avatar: agentAvatar,
+      })
+    );
+  }
 
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
@@ -60,18 +90,22 @@ function HomePage() {
         setArea(false);
         setBeds(false);
       }
+
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setAddAgent(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [modalRef]);
+
   useEffect(() => {
     dispatch(actions.getRegions());
     dispatch(actions.getRealEstates());
   }, [dispatch]);
-  console.log(regions);
 
   useEffect(() => {
     setPriceFromError(priceFrom && parseFloat(priceFrom) > parseFloat(priceTo));
@@ -83,13 +117,17 @@ function HomePage() {
     setAreaToError(areaTo && parseFloat(areaTo) < parseFloat(areaFrom));
   }, [areaFrom, areaTo]);
 
+  const selectedRegions = useMemo(() => {
+    return regions.filter(region => region.isSelected).map(region => region.name);
+  }, [regions]);
+
   return (
     <div className=" container mt-5">
       <div className=" pt-5">
         <div className="d-flex justify-content-between">
           <div className="filter">
             <div
-              ref={(el) => (filterRefs.current[0] = el)}
+              ref={(e) => (filterRefs.current[0] = e)}
               className="filter-item d-flex align-items-center gap-1"
               onClick={() => {
                 handleClick("region");
@@ -105,7 +143,7 @@ function HomePage() {
               />
             </div>
             <div
-              ref={(el) => (filterRefs.current[1] = el)}
+              ref={(e) => (filterRefs.current[1] = e)}
               className="filter-item d-flex align-items-center gap-1"
               onClick={() => {
                 handleClick("price");
@@ -121,7 +159,7 @@ function HomePage() {
               />
             </div>
             <div
-              ref={(el) => (filterRefs.current[2] = el)}
+              ref={(e) => (filterRefs.current[2] = e)}
               className="filter-item d-flex align-items-center gap-1"
               onClick={() => {
                 handleClick("area");
@@ -135,7 +173,7 @@ function HomePage() {
               <ArrowDown className={activeFilter === "area" ? "rotated" : ""} />
             </div>
             <div
-              ref={(el) => (filterRefs.current[3] = el)}
+              ref={(e) => (filterRefs.current[3] = e)}
               className="filter-item d-flex align-items-center gap-1"
               onClick={() => {
                 handleClick("beds");
@@ -149,9 +187,126 @@ function HomePage() {
               <ArrowDown className={activeFilter === "beds" ? "rotated" : ""} />
             </div>
           </div>
-          <ButtonAdd text="ლისტინგის დამატება" colored="#F93B1D" />
-          <ButtonAdd text="ლისტინგის დამატება" colored="transparent" />
+          <ButtonAdd
+            click={() => navigate("/add-listing")}
+            text="ლისტინგის დამატება"
+            colored="#F93B1D"
+          />
+          <ButtonAdd
+            click={() => setAddAgent(true)}
+            text="აგენტის დამატება"
+            colored="transparent"
+          />
         </div>
+        {addAgent && (
+          <ModalPop onClose={setAddAgent} size={"xl"} ref={modalRef}>
+            <div className="row text-center">
+              <div className="col-12 mx-auto">
+                <div className="modal-text d-flex flex-wrap justify-content-center mt-1">
+                  <div className="d-flex align-items-center mb-3">
+                    <h1>აგენტის დამატება</h1>
+                  </div>
+                  <div className="info-section mt-5 ">
+                    <div className="mt-3 mb-2">მდებარეობა</div>
+                    <div className="d-flex mt-3">
+                      <div className="me-5">
+                        <Input
+                          className="listing-input"
+                          type="text"
+                          label="სახელი *"
+                          state={agentName}
+                          setState={setAgentName}
+                          required={true}
+                        />
+                      </div>
+                      <Input
+                        className="listing-input"
+                        type="text"
+                        label="გვარი"
+                        state={agentSurName}
+                        setState={setAgentSurName}
+                      />
+                    </div>
+                    <div className="d-flex">
+                      <div className="me-5">
+                        <Input
+                          className="listing-input"
+                          type="email"
+                          label="ელ-ფოსტა*"
+                          state={agentEmail}
+                          setState={setAgentEmail}
+                          required={true}
+                        />
+                      </div>
+                      <div className="me-5">
+                        <Input
+                          className="listing-input"
+                          type="text"
+                          label="ტელეფონის ნომერი"
+                          state={agentPhone}
+                          setState={setAgentPhone}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="info-section mb-3">
+                    <div className="mt-3 mb-2">ატვირთეთ ფოტო *</div>
+                    <div className="d-flex">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="photo-upload"
+                        style={{ display: "none" }}
+                        onChange={handlePhotoUpload}
+                      />
+                      <div
+                        className="add-photo d-flex align-items-center justify-content-center"
+                        onClick={() =>
+                          document.getElementById("photo-upload").click()
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
+                        {!agentAvatar && <CirclePlus />}
+                        {agentAvatar && (
+                          <div className="ml-2">
+                            <img
+                              src={URL.createObjectURL(agentAvatar)}
+                              alt="Agent Avatar"
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex ">
+                    <button
+                      className="btn-default btn-cancel mx-3"
+                      onClick={() => {
+                        setAddAgent(false);
+                      }}
+                    >
+                      გაუქმება
+                    </button>
+                    <button
+                      className="btn-default btn-create mx-3"
+                      onClick={() => {
+                        setAddAgent(false);
+                        handleCreateAgent()
+                      }}
+                    >
+                      დადასტურება
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ModalPop>
+        )}
         {region && (
           <div
             ref={dropdownRef}
@@ -381,11 +536,11 @@ function HomePage() {
             className="beds-filter default-filter d-flex flex-column align-items-start"
           >
             <h4>საძინებლების რაოდენობა</h4>
-            <div className=" row mt-2" style={{ width: "332px" }}>
+            <div className=" row mt-2 gap-3" style={{ width: "332px" }}>
+              <button className="beds-counter">1</button>
               <button className="beds-counter">2</button>
               <button className="beds-counter">3</button>
               <button className="beds-counter">4</button>
-              <button className="beds-counter">5</button>
               <div className="d-flex justify-content-end">
                 <button
                   className="btn-default btn-choose mx-3"
@@ -401,10 +556,12 @@ function HomePage() {
           </div>
         )}
         <div className="d-flex mt-3">
-          <div className="param-item me-3">
-            თბილისი
-            <Xmark />
-          </div>
+        {selectedRegions.map((regionName, index) => (
+    <div key={index} className="param-item me-3">
+      {regionName}
+      <Xmark />
+    </div>
+  ))}
           <div className="param-item me-3">
             55 მ² - 90 მ²
             <Xmark />

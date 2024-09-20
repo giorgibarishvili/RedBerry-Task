@@ -63,14 +63,18 @@ function AddListing() {
                 label="მისამართი *"
                 state={address}
                 setState={setAddress}
+                required={true}
+                spanText="მინიმუმ ორი სიმბოლო"
               />
             </div>
             <Input
               className="listing-input"
               type="text"
-              label="postal"
+              label="საფოსტო ინდექსი *"
               state={postal}
               setState={setPostal}
+              required={true}
+              spanText="მინიმუმ ორი სიმბოლო"
             />
           </div>
           <div className="d-flex">

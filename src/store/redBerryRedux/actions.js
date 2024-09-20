@@ -60,6 +60,22 @@ const actions = {
     type: CONSTANTS.UPDATE_REGION,
     payload,
   }),
+  getCreateAgent: (payload) => ({
+    type: CONSTANTS.GET_CREATE_AGENTS,
+    payload,
+  }),
+  setCreateAgent: (payload) => ({
+    type: CONSTANTS.SET_CREATE_AGENTS,
+    payload,
+  }),
+  getCreateEstate: (payload) => ({
+    type: CONSTANTS.GET_CREATE_ESTATE,
+    payload,
+  }),
+  setCreateEstate: (payload) => ({
+    type: CONSTANTS.SET_CREATE_ESTATE,
+    payload,
+  }),
 };
 
 export default actions;

@@ -19,12 +19,11 @@ function ListingPage() {
 
   const [modalClose, setModalClose] = useState(false);
 
-  const realEstates = useSelector((state) => state.redBerry.realEstates);
+  // const realEstates = useSelector((state) => state.redBerry.realEstates);
   const selectedEstate = useSelector((state) => state.redBerry.selectedEstate);
 
-  const selectedRealEstate = realEstates.find((item) => item.id === Number(id));
+  // const selectedRealEstate = realEstates.find((item) => item.id === Number(id));
   useEffect(() => {
-    dispatch(actions.getRealEstates());
     dispatch(actions.getEstateById({ id }));
   }, [dispatch, id]);
 
@@ -50,7 +49,7 @@ function ListingPage() {
     };
   }, [modalRef]);
 
-  if (!selectedRealEstate) {
+  if (!selectedEstate) {
     return <div>Loading...</div>;
   }
   console.log(selectedEstate);
@@ -64,11 +63,11 @@ function ListingPage() {
         <div className="position-relative">
           <img
             className="main-img d-flex col-6"
-            src={selectedRealEstate.image}
+            src={selectedEstate.image}
             alt="house"
           />
           <div className="img-status">
-            {selectedRealEstate.is_rental === 0 ? "იყიდება" : "ქირავდება"}
+            {selectedEstate.is_rental === 0 ? "იყიდება" : "ქირავდება"}
           </div>
           <div
             className="mt-2 d-flex justify-content-end"
