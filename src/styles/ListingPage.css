@@ -42,3 +42,6 @@
   position: absolute;
 }
 
+.arrow-back{
+  cursor: pointer;
+}

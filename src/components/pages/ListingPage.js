@@ -58,7 +58,7 @@ function ListingPage() {
   return (
     <div className="container mb-5">
       <div className="d-flex mt-5 mb-4">
-        <ArrowLeft onClick={() => navigate("/")} />
+        <ArrowLeft className="arrow-back" onClick={() => navigate("/")} />
       </div>
       <div className="d-flex gap-5">
         <div className="position-relative">

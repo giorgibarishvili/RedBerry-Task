@@ -3,23 +3,18 @@ import { ReactComponent as ArrowDown } from "../../images/chevron-down-solid.svg
 import { ReactComponent as Xmark } from "../../images/xmark-solid.svg";
 import ButtonAdd from "../ButtonAdd";
 import Card from "../Card";
-import House from "../../images/image.png";
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CheckBox from "../CheckBox";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const dropdownRef = useRef(null);
   const filterRefs = useRef([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const cities = useSelector((state) => state.redBerry.cities);
   const regions = useSelector((state) => state.redBerry.regions);
-  const realEstates = useSelector((state) => state.redBerry.realEstates);
-  const agents = useSelector((state) => state.redBerry.agents);
   const filteredList = useSelector((state) => state.redBerry.filteredList);
 
   const [region, setRegion] = useState(false);
@@ -31,6 +26,11 @@ function HomePage() {
   const [areaFrom, setAreaFrom] = useState("");
   const [areaTo, setAreaTo] = useState("");
   const [activeFilter, setActiveFilter] = useState(null);
+
+  const [priceFromError, setPriceFromError] = useState(false);
+  const [priceToError, setPriceToError] = useState(false);
+  const [areaFromError, setAreaFromError] = useState(false);
+  const [areaToError, setAreaToError] = useState(false);
 
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
@@ -70,10 +70,18 @@ function HomePage() {
   useEffect(() => {
     dispatch(actions.getRegions());
     dispatch(actions.getRealEstates());
-    dispatch(actions.getCities());
-    dispatch(actions.getAgents());
   }, [dispatch]);
-  // console.log(realEstates);
+  console.log(regions);
+
+  useEffect(() => {
+    setPriceFromError(priceFrom && parseFloat(priceFrom) > parseFloat(priceTo));
+    setPriceToError(priceTo && parseFloat(priceTo) < parseFloat(priceFrom));
+  }, [priceFrom, priceTo]);
+
+  useEffect(() => {
+    setAreaFromError(areaFrom && parseFloat(areaFrom) > parseFloat(areaTo));
+    setAreaToError(areaTo && parseFloat(areaTo) < parseFloat(areaFrom));
+  }, [areaFrom, areaTo]);
 
   return (
     <div className=" container mt-5">
@@ -153,6 +161,7 @@ function HomePage() {
             <div className="checkbox-container">
               {regions.map((item) => (
                 <CheckBox
+                  id={item.id}
                   change={(e) => {
                     dispatch(
                       actions.updateRegion({
@@ -187,54 +196,76 @@ function HomePage() {
             className="price-filter default-filter d-flex flex-column align-items-start"
           >
             <h4>ფასის მიხედვით</h4>
-            <div className=" row mt-2" style={{ width: "332" }}>
-              <div className="form-floating   pb-5 col-6 row-column">
+            <div className="row mt-2" style={{ width: "332px" }}>
+              <div className="form-floating pb-5 col-6 row-column">
                 <input
                   type="text"
-                  className={`form-control${!priceFrom ? " is-invalid" : ""}`}
-                  id="floatingInput"
+                  className={`form-control${
+                    priceFromError || priceToError ? " is-invalid" : ""
+                  }`}
+                  id="priceFromInput"
                   value={priceFrom}
                   placeholder=""
-                  onChange={(e) => setPriceFrom(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      setPriceFrom(value);
+                    }
+                  }}
                   autoComplete="off"
                   required
+                  pattern="^\d*$"
                 />
-                <label htmlFor="floatingInput">nameInput</label>
-                {!priceFrom && (
-                  <span className="text-danger error-validation-text">
-                    mandatory
-                  </span>
-                )}
+                <label className="ms-2" htmlFor="priceFromInput">
+                  დან
+                </label>
                 <div>მინ. ფასი</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
+                {["50000", "100000", "150000", "200000", "250000"].map(
+                  (price) => (
+                    <div
+                      key={price}
+                      onClick={() => setPriceFrom(price)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {price} ₾
+                    </div>
+                  )
+                )}
               </div>
-              <div className="form-floating   pb-5 col-6 row-column">
+              <div className="form-floating pb-5 col-6 row-column">
                 <input
                   type="text"
-                  className={`form-control${!priceTo ? " is-invalid" : ""}`}
-                  id="floatingInput"
+                  className={`form-control${
+                    priceFromError || priceToError ? " is-invalid" : ""
+                  }`}
+                  id="priceToInput"
                   value={priceTo}
                   placeholder=""
-                  onChange={(e) => setPriceTo(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      setPriceTo(value);
+                    }
+                  }}
                   autoComplete="off"
                   required
+                  pattern="^\d*$"
                 />
-                <label htmlFor="floatingInput">nameInput</label>
-                {!priceTo && (
-                  <span className="text-danger error-validation-text">
-                    mandatory
-                  </span>
-                )}
+                <label className="ms-2" htmlFor="priceToInput">
+                  მდე
+                </label>
                 <div>მაქს. ფასი</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
-                <div>50,000 ₾</div>
+                {["50000", "100000", "150000", "200000", "250000"].map(
+                  (price) => (
+                    <div
+                      key={price}
+                      onClick={() => setPriceTo(price)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {price} ₾
+                    </div>
+                  )
+                )}
               </div>
               <div className="d-flex justify-content-end">
                 <button
@@ -242,6 +273,10 @@ function HomePage() {
                   onClick={() => {
                     setPrice(false);
                     handleClick(null);
+                  }}
+                  disabled={priceFromError || priceToError}
+                  style={{
+                    opacity: priceFromError || priceToError ? "0.5" : "1",
                   }}
                 >
                   არჩევა
@@ -256,54 +291,70 @@ function HomePage() {
             className="price-filter default-filter d-flex flex-column align-items-start"
           >
             <h4>ფართობის მიხედვით</h4>
-            <div className=" row mt-2" style={{ width: "332" }}>
-              <div className="form-floating   pb-5 col-6 row-column">
+            <div className="row mt-2" style={{ width: "332px" }}>
+              <div className="form-floating pb-5 col-6 row-column">
                 <input
                   type="text"
-                  className={`form-control${!areaFrom ? " is-invalid" : ""}`}
-                  id="floatingInput"
+                  className={`form-control${
+                    areaFromError ? " is-invalid" : ""
+                  }`}
+                  id="areaFromInput"
                   value={areaFrom}
                   placeholder=""
-                  onChange={(e) => setAreaFrom(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      setAreaFrom(value);
+                    }
+                  }}
                   autoComplete="off"
                   required
+                  pattern="^\d*$"
                 />
-                <label htmlFor="floatingInput">nameInput</label>
-                {!areaFrom && (
-                  <span className="text-danger error-validation-text">
-                    mandatory
-                  </span>
-                )}
+                <label className="ms-2" htmlFor="areaFromInput">
+                  დან
+                </label>
                 <div>მინ. მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
+                {["50", "100", "150", "200", "250"].map((area) => (
+                  <div
+                    key={area}
+                    onClick={() => setAreaFrom(area)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {area} მ²
+                  </div>
+                ))}
               </div>
-              <div className="form-floating   pb-5 col-6 row-column">
+              <div className="form-floating pb-5 col-6 row-column">
                 <input
                   type="text"
-                  className={`form-control${!areaTo ? " is-invalid" : ""}`}
-                  id="floatingInput"
+                  className={`form-control${areaToError ? " is-invalid" : ""}`}
+                  id="areaToInput"
                   value={areaTo}
                   placeholder=""
-                  onChange={(e) => setAreaTo(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      setAreaTo(value);
+                    }
+                  }}
                   autoComplete="off"
                   required
+                  pattern="^\d*$"
                 />
-                <label htmlFor="floatingInput">nameInput</label>
-                {!areaTo && (
-                  <span className="text-danger error-validation-text">
-                    mandatory
-                  </span>
-                )}
+                <label className="ms-2" htmlFor="areaToInput">
+                  მდე
+                </label>
                 <div>მაქს. მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
-                <div>50,000 მ²</div>
+                {["50", "100", "150", "200", "250"].map((area) => (
+                  <div
+                    key={area}
+                    onClick={() => setAreaTo(area)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {area} მ²
+                  </div>
+                ))}
               </div>
               <div className="d-flex justify-content-end">
                 <button
@@ -312,6 +363,10 @@ function HomePage() {
                     setArea(false);
                     handleClick(null);
                   }}
+                  disabled={areaFromError || areaToError}
+                  style={{
+                    opacity: areaFromError || areaToError ? "0.5" : "1",
+                  }}
                 >
                   არჩევა
                 </button>
@@ -319,6 +374,7 @@ function HomePage() {
             </div>
           </div>
         )}
+
         {beds && (
           <div
             ref={dropdownRef}
@@ -327,6 +383,9 @@ function HomePage() {
             <h4>საძინებლების რაოდენობა</h4>
             <div className=" row mt-2" style={{ width: "332px" }}>
               <button className="beds-counter">2</button>
+              <button className="beds-counter">3</button>
+              <button className="beds-counter">4</button>
+              <button className="beds-counter">5</button>
               <div className="d-flex justify-content-end">
                 <button
                   className="btn-default btn-choose mx-3"
