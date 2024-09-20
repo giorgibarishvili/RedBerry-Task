@@ -110,22 +110,22 @@ export function* watchGetEstateById() {
 export function* getCreateAgent() {
   yield takeLatest(CONSTANTS.GET_CREATE_AGENTS, function* (action) {
     try {
-      const { name, surname, email, phone, avatar } = action.payload
+      const { name, surname, email, phone, avatar } = action.payload;
 
       const formData = new FormData();
-      formData.append('name', name);
-      formData.append('surname', surname);
-      formData.append('email', email);
-      formData.append('phone', phone);
+      formData.append("name", name);
+      formData.append("surname", surname);
+      formData.append("email", email);
+      formData.append("phone", phone);
       if (avatar) {
-        formData.append('avatar', avatar);
+        formData.append("avatar", avatar);
       }
 
       const url = baseUrl + "agents";
       const res = yield window.mainAxios.post(url, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
       const data = res.data;
 
@@ -159,6 +159,20 @@ export function* getCreateEstate() {
     }
   });
 }
+export function* deleteEstate() {
+  yield takeLatest(CONSTANTS.DELETE_ESTATE, function* (action) {
+    try {
+      const url = `${baseUrl}real-estates/${action?.payload?.id}`;
+      yield window.mainAxios.delete(url).then((r) => r.data);
+
+      yield put(actions.removeEstate(action?.payload?.id));
+      yield put(actions.setFilteredList())
+      
+    } catch (e) {
+      console.error(e);
+    }
+  });
+}
 
 export default function* rootSaga() {
   yield all([
@@ -170,5 +184,6 @@ export default function* rootSaga() {
     fork(watchGetEstateById),
     fork(getCreateAgent),
     fork(getCreateEstate),
+    fork(deleteEstate)
   ]);
 }

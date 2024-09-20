@@ -76,6 +76,14 @@ const actions = {
     type: CONSTANTS.SET_CREATE_ESTATE,
     payload,
   }),
+  deleteEstate: (payload) => ({
+    type: CONSTANTS.DELETE_ESTATE,
+    payload,
+  }),
+  removeEstate: (payload) => ({
+    type: CONSTANTS.REMOVE_ESTATE,
+    payload,
+  }),
 };
 
 export default actions;

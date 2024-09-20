@@ -152,6 +152,8 @@ function ListingPage() {
                     className="btn-default btn-create mx-3"
                     onClick={() => {
                       setModalClose(false);
+                      dispatch(actions.deleteEstate({ id }));
+                      navigate("/");
                     }}
                   >
                     დადასტურება

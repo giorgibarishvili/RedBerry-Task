@@ -10,7 +10,7 @@ const initState = {
   filters: {},
   filteredList: [],
   createAgent: {},
-  createEstate: {}
+  createEstate: {},
 };
 
 const reducer = createReducer(initState, (builder) =>
@@ -60,6 +60,11 @@ const reducer = createReducer(initState, (builder) =>
     })
     .addCase(CONSTANTS.SET_CREATE_ESTATE, (state, action) => {
       state.createEstate = action.payload;
+    })
+    .addCase(CONSTANTS.REMOVE_ESTATE, (state, action) => {
+      state.realEstates = state.realEstates.filter(
+        ({ id }) => id.toString() !== action.id.toString()
+      );
     })
 );
 
