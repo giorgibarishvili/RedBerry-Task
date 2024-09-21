@@ -647,36 +647,65 @@ function HomePage() {
           {selectedRegions.map((regionName, index) => (
             <div key={index} className="param-item me-3">
               {regionName}
-              <Xmark />
+              <Xmark
+              style={{cursor: "pointer"}}
+                onClick={() => {
+                  dispatch(actions.clearIndividualFilter("regions"));
+                  dispatch(actions.setFilteredList());
+                }}
+              />
             </div>
           ))}
           {selectedPriceRange && (
             <div className="param-item me-3">
               {selectedPriceRange}
-              <Xmark />
+              <Xmark
+              style={{cursor: "pointer"}}
+                onClick={() => {
+                  dispatch(actions.clearIndividualFilter("priceRange"));
+                  dispatch(actions.setFilteredList());
+                }}
+              />
             </div>
           )}
           {selectedAreaRange && (
             <div className="param-item me-3">
-              {selectedAreaRange}
-              <Xmark />
+              {selectedAreaRange} მ²
+              <Xmark
+              style={{cursor: "pointer"}}
+                onClick={() => {
+                  dispatch(actions.clearIndividualFilter("areaRange"));
+                  dispatch(actions.setFilteredList());
+                }}
+              />
             </div>
           )}
           {selectedBedrooms && (
             <div className="param-item me-3">
               {selectedBedrooms}
-              <Xmark />
+              <Xmark
+              style={{cursor: "pointer"}}
+                onClick={() => {
+                  dispatch(actions.clearIndividualFilter("bedrooms"));
+                  dispatch(actions.setFilteredList());
+                }}
+              />
             </div>
           )}
-          <button
-            onClick={() => {
-              dispatch(actions.clearFilters());
-              dispatch(actions.setFilteredList());
-            }}
-            className="btn-clear"
-          >
-            გასუფთავება
-          </button>
+          {(selectedRegions.length > 0 ||
+            selectedPriceRange ||
+            selectedAreaRange ||
+            selectedBedrooms) && (
+            <button
+              onClick={() => {
+                dispatch(actions.clearFilters());
+                dispatch(actions.setFilteredList());
+              }}
+              className="btn-clear"
+            >
+              გასუფთავება
+            </button>
+          )}
         </div>
       </div>
       <div className="row justify-content-start">

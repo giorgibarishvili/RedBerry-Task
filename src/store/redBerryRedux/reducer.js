@@ -39,6 +39,25 @@ const reducer = createReducer(initState, (builder) =>
     .addCase(CONSTANTS.CLEAR_FILTERS, (state) => {
       state.filters = {};
     })
+    .addCase(CONSTANTS.CLEAR_INDIVIDUAL_FILTER, (state, action) => {
+      const filterType = action.payload;
+      switch (filterType) {
+        case 'regions':
+          state.filters.regions = [];
+          break;
+        case 'priceRange':
+          state.filters.priceRange = {};
+          break;
+        case 'areaRange':
+          state.filters.areaRange = {};
+          break;
+        case 'bedrooms':
+          state.filters.bedrooms = null;
+          break;
+        default:
+          break;
+      }
+    })
 
     .addCase(CONSTANTS.SET_FILTERED_LIST, (state) => {
       let filteredList = state.realEstates;

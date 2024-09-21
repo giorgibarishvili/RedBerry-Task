@@ -88,6 +88,10 @@ const actions = {
     type: CONSTANTS.CLEAR_FILTERS,
     payload,
   }),
+  clearIndividualFilter: (payload) => ({
+    type: CONSTANTS.CLEAR_INDIVIDUAL_FILTER,
+    payload,
+  }),
 };
 
 export default actions;
