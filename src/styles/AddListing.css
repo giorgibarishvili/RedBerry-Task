@@ -9,7 +9,7 @@
     border-color: #021526;
   }
   .form-check-input:checked[type="radio"] {
-    --bs-form-check-bg-image: url(../images/black-dot.svg);
+    --bs-form-check-bg-image: url(${require("../images/black-dot.svg")});
   }
 }
 .info-section {
