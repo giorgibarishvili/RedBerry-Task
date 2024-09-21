@@ -9,7 +9,7 @@ function CheckBox({ text, change, isSelected, id }) {
         onChange={change}
         checked={isSelected}
       />
-      <label className="form-check-label" htmlFor="flexCheckDefault" for={id}>
+      <label className="form-check-label" htmlFor={id}>
         {text}
       </label>
     </div>

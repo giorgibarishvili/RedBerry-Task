@@ -14,7 +14,6 @@ function AddListing() {
   const agents = useSelector((state) => state.redBerry.agents);
   const cities = useSelector((state) => state.redBerry.cities);
   const regions = useSelector((state) => state.redBerry.regions);
-  const createEstate = useSelector((state) => state.redBerry.createEstate);
 
   const [sellStatus, setSellStatus] = useState(0);
   const [address, setAddress] = useState("");
@@ -88,18 +87,29 @@ function AddListing() {
         bedrooms: bedrooms,
         is_rental: sellStatus,
         agent_id: agent,
-        navigate
+        navigate,
       })
     );
   };
-  useEffect(() => {
-    console.log(createEstate);
-  }, [createEstate]);
+
+  const isFormValid = () => {
+    return (
+      address.length > 1 &&
+      postal &&
+      price &&
+      area &&
+      bedrooms &&
+      description.length > 4 &&
+      region &&
+      city &&
+      image
+    );
+  };
 
   return (
     <div className="container">
       <h2>ლისტინგის დამატება</h2>
-      <form className="form mb-5">
+      <form className="form mb-5 mt-5">
         <div className="info-section">
           გარიგების ტიპი
           <div className="d-flex mt-2">
@@ -200,6 +210,7 @@ function AddListing() {
                 label="ფასი"
                 state={price}
                 setState={setPrice}
+                spanText="მხოლოდ რიცხვები"
               />
             </div>
             <Input
@@ -208,6 +219,7 @@ function AddListing() {
               label="ფართობი"
               state={area}
               setState={setArea}
+              spanText="მხოლოდ რიცხვები"
             />
           </div>
           <div className="d-flex">
@@ -217,6 +229,7 @@ function AddListing() {
               label="საძინებლების რაოდენობა*"
               state={bedrooms}
               setState={setBedrooms}
+              spanText="მხოლოდ რიცხვები"
             />
           </div>
         </div>
@@ -228,6 +241,7 @@ function AddListing() {
               label=""
               state={description}
               setState={setDescription}
+              spanText="მინიმუმ ხუთი სიტყვა"
             />
           </div>
         </div>
@@ -276,7 +290,6 @@ function AddListing() {
                   {item.name + " " + item.surname}
                 </option>
               ))}
-              <option selected>აირჩიე</option>
             </select>
           </div>
         </div>
@@ -292,6 +305,8 @@ function AddListing() {
           <button
             className="btn-default btn-create mx-3"
             onClick={(e) => handleCreateEstate(e)}
+            disabled={!isFormValid()}
+            style={{ opacity: !isFormValid() ? "0.5" : 1 }}
           >
             დაამატე ლისტინგი
           </button>

@@ -15,10 +15,10 @@ function Input({
   const handleChange = (e) => {
     setState(e.target.value);
     if (!touched) {
-      setTouched(true); // Mark as touched when user types
+      setTouched(true);
     }
   };
-  const isInvalid = touched && (state.length < 2);
+  const isInvalid = touched && type === "text" && state.length < 2;
   return (
     <div className="pb-5 col-5 row-column">
       <label htmlFor="">{label}</label>
@@ -28,18 +28,24 @@ function Input({
         value={state}
         placeholder=""
         onChange={handleChange}
-        onBlur={() => setTouched(true)} // Mark as touched when input loses focus
+        onBlur={() => setTouched(true)}
         autoComplete="off"
         required={required}
       />
 
-      {/* {touched && !state && ( */}
       {spanText && (
-        <span className={`${isInvalid ? "text-danger error-validation-text" : "valid-feedback"}`}>
+        <span
+          className={`${
+            isInvalid
+              ? "two-symb-error"
+              : state.length >= 2 && type === "text"
+              ? "two-symb-done"
+              : ""
+          }`}
+        >
           <Confirm /> {spanText}
         </span>
       )}
-      {/* )} */}
     </div>
   );
 }

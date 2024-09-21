@@ -9,6 +9,7 @@ function Navbar() {
     <div className="navbar">
       <div className="container">
         <Logo
+        style={{cursor: "pointer"}}
           onClick={() => {
             navigate("/");
           }}
