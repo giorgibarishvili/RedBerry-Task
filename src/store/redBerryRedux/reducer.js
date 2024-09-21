@@ -96,14 +96,12 @@ const reducer = createReducer(initState, (builder) =>
             (e) => e.area <= state?.filters?.areaRange?.areaTo
           );
         }
-        debugger;
         if (state.filters.areaRange.areaFrom) {
           filteredList = filteredList.filter(
             (e) => e.area >= state?.filters?.areaRange?.areaFrom
           );
         }
       }
-      debugger;
 
       if (state.filters.bedrooms) {
         if (state.filters.bedrooms === 4) {
