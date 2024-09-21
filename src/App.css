@@ -1,16 +1,16 @@
 body {
   background-color: #ffffff;
   color: rgb(2, 21, 38);
-  font-family: FiraGO;
+  font-family: "FiraGO", sans-serif;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 19.2px;
   text-align: center;
   font-style: normal;
 }
 .form-check-input:checked {
-  background-color: #45A849;
-  border-color: #45A849;
+  background-color: #45a849;
+  border-color: #45a849;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

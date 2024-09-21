@@ -4,6 +4,12 @@ import HomePage from "./components/pages/HomePage";
 import Navbar from "./components/pages/Navbar";
 import ListingPage from "./components/pages/ListingPage";
 import AddListing from "./components/pages/AddListing";
+import '@fontsource/firago/400.css';
+import '@fontsource/firago/500.css';
+import '@fontsource/firago/600.css';
+import '@fontsource/firago/700.css';
+import '@fontsource/firago/800.css';
+import '@fontsource/firago/900.css';
 function App() {
   return (
     <Router>

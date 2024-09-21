@@ -84,22 +84,22 @@ function ListingPage() {
           </div>
         </div>
         <div className="col-6 d-flex flex-column align-items-start">
-          <h1 className="mt-3 mb-5">
+          <h1 className="mt-3 mb-5" style={{ fontWeight: "700" }}>
             {selectedEstate.price.toLocaleString("en-US")} ₾
           </h1>
           <div className="listing-params">
-            <h5>
+            <p>
               <LocPin /> {selectedEstate.address}
-            </h5>
-            <h5>
+            </p>
+            <p>
               <Area /> {selectedEstate.area} მ²
-            </h5>
-            <h5>
+            </p>
+            <p>
               <Bed /> {selectedEstate.bedrooms}
-            </h5>
-            <h5>
+            </p>
+            <p>
               <Postal /> საფოსტო ინდექსი {selectedEstate.zip_code}
-            </h5>
+            </p>
             <span className="mt-5">{selectedEstate.description}</span>
           </div>
           <div className="agent-card">

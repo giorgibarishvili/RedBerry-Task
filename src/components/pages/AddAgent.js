@@ -57,7 +57,7 @@ const AddAgent = forwardRef(
     };
     return (
       <ModalPop onClose={onClose} size={size} ref={ref}>
-        <div className="row text-center">
+        <div className="row text-center" style={{fontWeight: "500"}}>
           <div className="col-12 mx-auto">
             <div className="modal-text d-flex flex-wrap justify-content-center mt-1">
               <div className="d-flex align-items-center mb-3">

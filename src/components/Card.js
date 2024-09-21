@@ -13,7 +13,7 @@ function Card({ picture, status, price, address, beds, area, post }) {
         </div>
       </div>
       <div className="product-content">
-        <h3 style={{ color: "#021526" }}>{price} ₾</h3>
+        <h3 style={{ color: "#021526", fontWeight: "700" }}>{price} ₾</h3>
         <div className="gap-2 d-flex">
           <LocPin /> {address}
         </div>

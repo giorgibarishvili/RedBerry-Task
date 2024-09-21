@@ -166,7 +166,7 @@ function HomePage() {
   return (
     <div className=" container mt-5 mb-5">
       <div className=" pt-5">
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between filter-wrap">
           <div className="filter">
             <div
               ref={(e) => (filterRefs.current[0] = e)}
@@ -599,20 +599,28 @@ function HomePage() {
         </div>
       </div>
       <div className="row justify-content-start">
-        {filteredList.map((item) => (
-          <Link className="card-link" key={item.id} to={`/listing/${item.id}`}>
-            <Card
+        {filteredList.length > 0 ? (
+          filteredList.map((item) => (
+            <Link
+              className="card-link"
               key={item.id}
-              picture={item.image}
-              status={item.is_rental}
-              price={item.price}
-              address={item.address}
-              beds={item.bedrooms}
-              area={item.area}
-              post={item.zip_code}
-            />
-          </Link>
-        ))}
+              to={`/listing/${item.id}`}
+            >
+              <Card
+                key={item.id}
+                picture={item.image}
+                status={item.is_rental}
+                price={item.price}
+                address={item.address}
+                beds={item.bedrooms}
+                area={item.area}
+                post={item.zip_code}
+              />
+            </Link>
+          ))
+        ) : (
+          <div className="d-flex mt-3">აღნიშნული მონაცემებით განცხადება არ იძებნება</div>
+        )}
       </div>
     </div>
   );
