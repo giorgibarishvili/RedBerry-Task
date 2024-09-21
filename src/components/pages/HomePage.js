@@ -183,7 +183,7 @@ function HomePage() {
   }, [filters]);
 
   return (
-    <div className=" container mt-5">
+    <div className=" container mt-5 mb-5">
       <div className=" pt-5">
         <div className="d-flex justify-content-between">
           <div className="filter">

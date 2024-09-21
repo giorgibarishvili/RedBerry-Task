@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import actions from "../../store/redBerryRedux/actions";
 import ModalPop from "../ModalPop";
+import Slider from "../Slider";
 function ListingPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,7 +20,6 @@ function ListingPage() {
 
   const [modalClose, setModalClose] = useState(false);
 
-  // const realEstates = useSelector((state) => state.redBerry.realEstates);
   const selectedEstate = useSelector((state) => state.redBerry.selectedEstate);
 
   useEffect(() => {
@@ -49,11 +49,13 @@ function ListingPage() {
   }, [modalRef]);
 
   if (!selectedEstate) {
-    return <span
-    className="spinner-border spinner-border-sm"
-    role="status"
-    aria-hidden="true"
-  ></span>;
+    return (
+      <span
+        className="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    );
   }
 
   return (
@@ -166,6 +168,8 @@ function ListingPage() {
           </div>
         </ModalPop>
       )}
+      <h2 className="mt-3 d-flex">ბინები მსგავს ლოკაციაზე</h2>
+      <Slider />
     </div>
   );
 }
