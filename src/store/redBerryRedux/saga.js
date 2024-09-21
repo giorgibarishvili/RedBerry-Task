@@ -156,6 +156,7 @@ export function* getCreateEstate() {
         bedrooms,
         is_rental,
         agent_id,
+        navigate
       } = action.payload;
       const formData = new FormData();
       formData.append("address", address);
@@ -182,8 +183,8 @@ export function* getCreateEstate() {
       if (!data || typeof data !== "object") {
         throw new Error("Invalid response data format");
       }
-
-      yield put(actions.setCreateEstate(data));
+      yield put(actions.setCreateEstate(action.payload));
+      navigate("/");
     } catch (e) {
       yield put(actions.setCreateEstate([]));
       console.error(e);

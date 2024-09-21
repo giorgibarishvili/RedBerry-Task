@@ -66,6 +66,7 @@ function HomePage() {
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
   };
+
   const setRegionsFilter = () => {
     dispatch(
       actions.setFilters({
@@ -75,7 +76,31 @@ function HomePage() {
       })
     );
     dispatch(actions.setFilteredList());
-    console.log(regions);
+  };
+
+  const setPriceFilter = () => {
+    dispatch(
+      actions.setFilters({
+        priceRange: { priceFrom, priceTo },
+      })
+    );
+    dispatch(actions.setFilteredList());
+  };
+  const setAreaFilter = () => {
+    dispatch(
+      actions.setFilters({
+        areaRange: { areaFrom, areaTo },
+      })
+    );
+    dispatch(actions.setFilteredList());
+  };
+  const setBedroomsFilter = () => {
+    dispatch(
+      actions.setFilters({
+        bedrooms: beds === "4+" ? 4 : beds,
+      })
+    );
+    dispatch(actions.setFilteredList());
   };
 
   useEffect(() => {
@@ -123,6 +148,39 @@ function HomePage() {
       .filter((region) => filters?.regions?.indexOf(region.id) > -1)
       .map((region) => region.name);
   }, [filters, regions]);
+  const selectedPriceRange = useMemo(() => {
+    const from = filters?.priceRange?.priceFrom;
+    const to = filters?.priceRange?.priceTo;
+
+    if (from && to) {
+      return `${from} - ${to}`;
+    } else if (from) {
+      return from.toString();
+    } else if (to) {
+      return to.toString();
+    }
+    return null;
+  }, [filters]);
+  const selectedAreaRange = useMemo(() => {
+    const from = filters?.areaRange?.areaFrom;
+    const to = filters?.areaRange?.areaTo;
+
+    if (from && to) {
+      return `${from} - ${to}`;
+    } else if (from) {
+      return from.toString();
+    } else if (to) {
+      return to.toString();
+    }
+    return null;
+  }, [filters]);
+
+  const selectedBedrooms = useMemo(() => {
+    if (filters?.bedrooms) {
+      return filters.bedrooms === 4 ? "4+" : filters.bedrooms.toString();
+    }
+    return null;
+  }, [filters]);
 
   return (
     <div className=" container mt-5">
@@ -431,6 +489,7 @@ function HomePage() {
                   onClick={() => {
                     setPrice(false);
                     handleClick(null);
+                    setPriceFilter();
                   }}
                   disabled={priceFromError || priceToError}
                   style={{
@@ -520,6 +579,7 @@ function HomePage() {
                   onClick={() => {
                     setArea(false);
                     handleClick(null);
+                    setAreaFilter();
                   }}
                   disabled={areaFromError || areaToError}
                   style={{
@@ -540,16 +600,41 @@ function HomePage() {
           >
             <h4>საძინებლების რაოდენობა</h4>
             <div className=" row mt-2 gap-3" style={{ width: "332px" }}>
-              <button className="beds-counter">1</button>
-              <button className="beds-counter">2</button>
-              <button className="beds-counter">3</button>
-              <button className="beds-counter">4</button>
+              <button
+                className="beds-counter"
+                onClick={() => setBeds(1)}
+                style={{ borderColor: beds === 1 ? "green" : "" }}
+              >
+                1
+              </button>
+              <button
+                className="beds-counter"
+                onClick={() => setBeds(2)}
+                style={{ borderColor: beds === 2 ? "green" : "" }}
+              >
+                2
+              </button>
+              <button
+                className="beds-counter"
+                onClick={() => setBeds(3)}
+                style={{ borderColor: beds === 3 ? "green" : "" }}
+              >
+                3
+              </button>
+              <button
+                className="beds-counter"
+                onClick={() => setBeds("4+")}
+                style={{ borderColor: beds === "4+" ? "green" : "" }}
+              >
+                4+
+              </button>
               <div className="d-flex justify-content-end">
                 <button
                   className="btn-default btn-choose mx-3"
                   onClick={() => {
                     setBeds(false);
                     handleClick(null);
+                    setBedroomsFilter();
                   }}
                 >
                   არჩევა
@@ -565,10 +650,24 @@ function HomePage() {
               <Xmark />
             </div>
           ))}
-          <div className="param-item me-3">
-            55 მ² - 90 მ²
-            <Xmark />
-          </div>
+          {selectedPriceRange && (
+            <div className="param-item me-3">
+              {selectedPriceRange}
+              <Xmark />
+            </div>
+          )}
+          {selectedAreaRange && (
+            <div className="param-item me-3">
+              {selectedAreaRange}
+              <Xmark />
+            </div>
+          )}
+          {selectedBedrooms && (
+            <div className="param-item me-3">
+              {selectedBedrooms}
+              <Xmark />
+            </div>
+          )}
           <button
             onClick={() => {
               dispatch(actions.clearFilters());

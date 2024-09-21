@@ -10,7 +10,6 @@ const initState = {
   filters: {},
   filteredList: [],
   createAgent: {},
-  createEstate: {},
 };
 
 const reducer = createReducer(initState, (builder) =>
@@ -40,23 +39,52 @@ const reducer = createReducer(initState, (builder) =>
     .addCase(CONSTANTS.CLEAR_FILTERS, (state) => {
       state.filters = {};
     })
-        // .addCase(CONSTANTS.REMOVE_FILTER, (state, action) => {
 
-          // which filter
-        // delete state.filters.regions
-    //   state.filters = {};
-    // })
-  
     .addCase(CONSTANTS.SET_FILTERED_LIST, (state) => {
-      // TO-DO if logics
-      if (!state.filters.regions?.length) {
-        state.filteredList = state.realEstates;
-      } else {
-        state.filteredList = state.realEstates.filter(
+      let filteredList = state.realEstates;
+
+      if (state.filters.regions?.length) {
+        filteredList = filteredList.filter(
           (e) => state.filters.regions.indexOf(e.city.region_id) > -1
         );
       }
+
+      if (state.filters.priceRange) {
+        if (state.filters.priceRange.priceTo) {
+          filteredList = filteredList.filter(
+            (e) => e.price <= state?.filters?.priceRange?.priceTo
+          );
+        }
+        if (state.filters.priceRange.priceFrom) {
+          filteredList = filteredList.filter(
+            (e) => e.price >= state?.filters?.priceRange?.priceFrom
+          );
+        }
+      }
+      
+      if (state.filters.areaRange) {
+        if (state.filters.areaRange.areaTo) {
+          filteredList = filteredList.filter(
+            (e) => e.price <= state?.filters?.areaRange?.areaTo
+          );
+        }
+        if (state.filters.areaRange.areaFrom) {
+          filteredList = filteredList.filter(
+            (e) => e.price >= state?.filters?.areaRange?.areaFrom
+          );
+        }
+      }
+
+      if (state.filters.bedrooms) {
+        if (state.filters.bedrooms === 4) {
+          filteredList = filteredList.filter((e) => e.bedrooms >= 4);
+        } else {
+          filteredList = filteredList.filter((e) => e.bedrooms === state.filters.bedrooms);
+        }
+      }
+      state.filteredList = filteredList;
     })
+
     .addCase(CONSTANTS.UPDATE_REGION, (state, action) => {
       console.log(action);
 
@@ -71,7 +99,7 @@ const reducer = createReducer(initState, (builder) =>
       state.createAgent = action.payload;
     })
     .addCase(CONSTANTS.SET_CREATE_ESTATE, (state, action) => {
-      state.createEstate = action.payload;
+      state.realEstates = state.realEstates.concat(action.payload);
     })
     .addCase(CONSTANTS.REMOVE_ESTATE, (state, action) => {
       state.realEstates = state.realEstates.filter(

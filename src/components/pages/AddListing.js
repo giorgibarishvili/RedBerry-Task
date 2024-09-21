@@ -14,6 +14,7 @@ function AddListing() {
   const agents = useSelector((state) => state.redBerry.agents);
   const cities = useSelector((state) => state.redBerry.cities);
   const regions = useSelector((state) => state.redBerry.regions);
+  const createEstate = useSelector((state) => state.redBerry.createEstate);
 
   const [sellStatus, setSellStatus] = useState(0);
   const [address, setAddress] = useState("");
@@ -41,26 +42,25 @@ function AddListing() {
       (city) => city.region_id === parseInt(selectedRegion)
     );
     if (filteredCities.length > 0) {
-      setCity(filteredCities[0].id); 
+      setCity(filteredCities[0].id);
     } else {
-      setCity(""); 
+      setCity("");
     }
   };
-
 
   useEffect(() => {
     if (regions.length > 0) {
       const firstRegionId = regions[0].id;
-      setRegion(firstRegionId); 
+      setRegion(firstRegionId);
 
       const filteredCities = cities.filter(
         (city) => city.region_id === firstRegionId
       );
       if (filteredCities.length > 0) {
-        setCity(filteredCities[0].id); 
+        setCity(filteredCities[0].id);
       }
     }
-  }, [regions,cities]);
+  }, [regions, cities]);
 
   const filteredCities = cities.filter(
     (city) => city.region_id === parseInt(region)
@@ -73,7 +73,8 @@ function AddListing() {
     }
   };
 
-  const handleCreateAgent = () => {
+  const handleCreateEstate = (e) => {
+    e.preventDefault();
     dispatch(
       actions.getCreateEstate({
         address: address,
@@ -87,9 +88,13 @@ function AddListing() {
         bedrooms: bedrooms,
         is_rental: sellStatus,
         agent_id: agent,
+        navigate
       })
     );
   };
+  useEffect(() => {
+    console.log(createEstate);
+  }, [createEstate]);
 
   return (
     <div className="container">
@@ -286,7 +291,7 @@ function AddListing() {
           </button>
           <button
             className="btn-default btn-create mx-3"
-            onClick={() => handleCreateAgent()}
+            onClick={(e) => handleCreateEstate(e)}
           >
             დაამატე ლისტინგი
           </button>
