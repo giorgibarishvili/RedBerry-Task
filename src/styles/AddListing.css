@@ -56,3 +56,17 @@
 .two-symb-done {
   color: green;
 }
+.image-cont {
+  position: relative;
+}
+.trash-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #021526;
+  background-color: #ffffff;
+  z-index: 555;
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+}

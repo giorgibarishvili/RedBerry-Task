@@ -1,6 +1,7 @@
 import Input from "../Input";
 import ModalPop from "../ModalPop";
 import { ReactComponent as CirclePlus } from "../../images/circle-plus-solid.svg";
+import { ReactComponent as TrashIcon } from "../../images/trash-icon.svg";
 import { useDispatch } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
 import { forwardRef } from "react";
@@ -31,6 +32,9 @@ const AddAgent = forwardRef(
         setAvatarInput(file);
       }
     };
+    const handleDeletePhoto = () => {
+      setAvatarInput(null);
+    };
     const handleCreateAgent = () => {
       dispatch(
         actions.getCreateAgent({
@@ -42,6 +46,15 @@ const AddAgent = forwardRef(
         })
       );
     };
+    const isFormValid = () => {
+      return (
+        nameInput.length > 1 &&
+        surnameInput.length > 1 &&
+        emailInput &&
+        phoneInput &&
+        avatarInput
+      );
+    };
     return (
       <ModalPop onClose={onClose} size={size} ref={ref}>
         <div className="row text-center">
@@ -51,7 +64,6 @@ const AddAgent = forwardRef(
                 <h1>აგენტის დამატება</h1>
               </div>
               <div className="info-section mt-5 ">
-                <div className="mt-3 mb-2">მდებარეობა</div>
                 <div className="d-flex mt-3">
                   <div className="me-5">
                     <Input
@@ -116,7 +128,7 @@ const AddAgent = forwardRef(
                   >
                     {!avatarInput && <CirclePlus />}
                     {avatarInput && (
-                      <div className="ml-2">
+                      <div className="image-cont">
                         <img
                           src={URL.createObjectURL(avatarInput)}
                           alt="Agent Avatar"
@@ -126,6 +138,15 @@ const AddAgent = forwardRef(
                             objectFit: "cover",
                           }}
                         />
+                        <div
+                          className="trash-icon"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeletePhoto();
+                          }}
+                        >
+                          <TrashIcon />
+                        </div>
                       </div>
                     )}
                   </div>
@@ -146,6 +167,8 @@ const AddAgent = forwardRef(
                     onClose(false);
                     handleCreateAgent();
                   }}
+                  disabled={!isFormValid()}
+                  style={{ opacity: !isFormValid() ? "0.5" : 1 }}
                 >
                   დადასტურება
                 </button>

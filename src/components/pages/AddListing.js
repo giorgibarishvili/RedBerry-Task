@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Input from "../Input";
 import TextArea from "../TextArea";
 import { ReactComponent as CirclePlus } from "../../images/circle-plus-solid.svg";
+import { ReactComponent as TrashIcon } from "../../images/trash-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
@@ -70,6 +71,10 @@ function AddListing() {
     if (file) {
       setImage(file);
     }
+  };
+
+  const handleDeletePhoto = () => {
+    setImage(null);
   };
 
   const handleCreateEstate = (e) => {
@@ -262,7 +267,7 @@ function AddListing() {
             >
               {!image && <CirclePlus />}
               {image && (
-                <div className="ml-2">
+                <div className="image-cont">
                   <img
                     src={URL.createObjectURL(image)}
                     alt="Agent Avatar"
@@ -272,6 +277,15 @@ function AddListing() {
                       objectFit: "cover",
                     }}
                   />
+                  <div
+                    className="trash-icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeletePhoto();
+                    }}
+                  >
+                    <TrashIcon />
+                  </div>
                 </div>
               )}
             </div>
