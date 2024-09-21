@@ -93,15 +93,17 @@ const reducer = createReducer(initState, (builder) =>
       if (state.filters.areaRange) {
         if (state.filters.areaRange.areaTo) {
           filteredList = filteredList.filter(
-            (e) => e.price <= state?.filters?.areaRange?.areaTo
+            (e) => e.area <= state?.filters?.areaRange?.areaTo
           );
         }
+        debugger;
         if (state.filters.areaRange.areaFrom) {
           filteredList = filteredList.filter(
-            (e) => e.price >= state?.filters?.areaRange?.areaFrom
+            (e) => e.area >= state?.filters?.areaRange?.areaFrom
           );
         }
       }
+      debugger;
 
       if (state.filters.bedrooms) {
         if (state.filters.bedrooms === 4) {
