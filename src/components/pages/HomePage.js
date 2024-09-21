@@ -111,6 +111,7 @@ function HomePage() {
   useEffect(() => {
     dispatch(actions.getRegions());
     dispatch(actions.getRealEstates());
+    dispatch(actions.setFilteredList());
   }, [dispatch]);
 
   useEffect(() => {

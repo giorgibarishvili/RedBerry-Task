@@ -1,13 +1,22 @@
 import { createReducer } from "@reduxjs/toolkit";
 import CONSTANTS from "./CONSTANTS";
 
+const saveFiltersToLocalStorage = (filters) => {
+  localStorage.setItem("realEstateFilters", JSON.stringify(filters));
+};
+
+const loadFiltersFromLocalStorage = () => {
+  const savedFilters = localStorage.getItem("realEstateFilters");
+  return savedFilters ? JSON.parse(savedFilters) : {};
+};
+
 const initState = {
   cities: [],
   regions: [],
   realEstates: [],
   agents: [],
   selectedEstate: null,
-  filters: {},
+  filters: loadFiltersFromLocalStorage(),
   filteredList: [],
   createAgent: {},
 };
@@ -32,31 +41,31 @@ const reducer = createReducer(initState, (builder) =>
     })
     .addCase(CONSTANTS.SET_FILTERS, (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-
-      // { regions: [1,2,3 ] }
-      // console.log(state.filters);
+      saveFiltersToLocalStorage(state.filters);
     })
     .addCase(CONSTANTS.CLEAR_FILTERS, (state) => {
       state.filters = {};
+      saveFiltersToLocalStorage(state.filters);
     })
     .addCase(CONSTANTS.CLEAR_INDIVIDUAL_FILTER, (state, action) => {
       const filterType = action.payload;
       switch (filterType) {
-        case 'regions':
+        case "regions":
           state.filters.regions = [];
           break;
-        case 'priceRange':
+        case "priceRange":
           state.filters.priceRange = {};
           break;
-        case 'areaRange':
+        case "areaRange":
           state.filters.areaRange = {};
           break;
-        case 'bedrooms':
+        case "bedrooms":
           state.filters.bedrooms = null;
           break;
         default:
           break;
       }
+      saveFiltersToLocalStorage(state.filters);
     })
 
     .addCase(CONSTANTS.SET_FILTERED_LIST, (state) => {
@@ -80,7 +89,7 @@ const reducer = createReducer(initState, (builder) =>
           );
         }
       }
-      
+
       if (state.filters.areaRange) {
         if (state.filters.areaRange.areaTo) {
           filteredList = filteredList.filter(
@@ -98,7 +107,9 @@ const reducer = createReducer(initState, (builder) =>
         if (state.filters.bedrooms === 4) {
           filteredList = filteredList.filter((e) => e.bedrooms >= 4);
         } else {
-          filteredList = filteredList.filter((e) => e.bedrooms === state.filters.bedrooms);
+          filteredList = filteredList.filter(
+            (e) => e.bedrooms === state.filters.bedrooms
+          );
         }
       }
       state.filteredList = filteredList;
