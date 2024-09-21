@@ -8,9 +8,7 @@ import CheckBox from "../CheckBox";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../store/redBerryRedux/actions";
 import { Link, useNavigate } from "react-router-dom";
-import ModalPop from "../ModalPop";
-import Input from "../Input";
-import { ReactComponent as CirclePlus } from "../../images/circle-plus-solid.svg";
+import AddAgent from "./AddAgent";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -44,24 +42,6 @@ function HomePage() {
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
   const [agentAvatar, setAgentAvatar] = useState(null);
-
-  const handlePhotoUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setAgentAvatar(file);
-    }
-  };
-  const handleCreateAgent = () => {
-    dispatch(
-      actions.getCreateAgent({
-        name: agentName,
-        surname: agentSurName,
-        email: agentEmail,
-        phone: agentPhone,
-        avatar: agentAvatar,
-      })
-    );
-  };
 
   const handleClick = (filter) => {
     setActiveFilter((prevFilter) => (prevFilter === filter ? null : filter));
@@ -260,114 +240,23 @@ function HomePage() {
           />
         </div>
         {addAgent && (
-          <ModalPop onClose={setAddAgent} size={"xl"} ref={modalRef}>
-            <div className="row text-center">
-              <div className="col-12 mx-auto">
-                <div className="modal-text d-flex flex-wrap justify-content-center mt-1">
-                  <div className="d-flex align-items-center mb-3">
-                    <h1>აგენტის დამატება</h1>
-                  </div>
-                  <div className="info-section mt-5 ">
-                    <div className="mt-3 mb-2">მდებარეობა</div>
-                    <div className="d-flex mt-3">
-                      <div className="me-5">
-                        <Input
-                          className="listing-input"
-                          type="text"
-                          label="სახელი *"
-                          state={agentName}
-                          setState={setAgentName}
-                          required={true}
-                        />
-                      </div>
-                      <Input
-                        className="listing-input"
-                        type="text"
-                        label="გვარი"
-                        state={agentSurName}
-                        setState={setAgentSurName}
-                      />
-                    </div>
-                    <div className="d-flex">
-                      <div className="me-5">
-                        <Input
-                          className="listing-input"
-                          type="email"
-                          label="ელ-ფოსტა*"
-                          state={agentEmail}
-                          setState={setAgentEmail}
-                          required={true}
-                        />
-                      </div>
-                      <div className="me-5">
-                        <Input
-                          className="listing-input"
-                          type="text"
-                          label="ტელეფონის ნომერი"
-                          state={agentPhone}
-                          setState={setAgentPhone}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="info-section mb-3">
-                    <div className="mt-3 mb-2">ატვირთეთ ფოტო *</div>
-                    <div className="d-flex">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        id="photo-upload"
-                        style={{ display: "none" }}
-                        onChange={handlePhotoUpload}
-                      />
-                      <div
-                        className="add-photo d-flex align-items-center justify-content-center"
-                        onClick={() =>
-                          document.getElementById("photo-upload").click()
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        {!agentAvatar && <CirclePlus />}
-                        {agentAvatar && (
-                          <div className="ml-2">
-                            <img
-                              src={URL.createObjectURL(agentAvatar)}
-                              alt="Agent Avatar"
-                              style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="d-flex ">
-                    <button
-                      className="btn-default btn-cancel mx-3"
-                      onClick={() => {
-                        setAddAgent(false);
-                      }}
-                    >
-                      გაუქმება
-                    </button>
-                    <button
-                      className="btn-default btn-create mx-3"
-                      onClick={() => {
-                        setAddAgent(false);
-                        handleCreateAgent();
-                      }}
-                    >
-                      დადასტურება
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ModalPop>
+          <AddAgent
+            onClose={setAddAgent}
+            size="xl"
+            ref={modalRef}
+            nameInput={agentName}
+            setNameInput={setAgentName}
+            surnameInput={agentSurName}
+            setSurnameInput={setAgentSurName}
+            emailInput={agentEmail}
+            setEmailInput={setAgentEmail}
+            phoneInput={agentPhone}
+            setPhoneInput={setAgentPhone}
+            setAvatarInput={setAgentAvatar}
+            avatarInput={agentAvatar}
+          />
         )}
+
         {region && (
           <div
             ref={dropdownRef}
@@ -648,7 +537,7 @@ function HomePage() {
             <div key={index} className="param-item me-3">
               {regionName}
               <Xmark
-              style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(actions.clearIndividualFilter("regions"));
                   dispatch(actions.setFilteredList());
@@ -660,7 +549,7 @@ function HomePage() {
             <div className="param-item me-3">
               {selectedPriceRange}
               <Xmark
-              style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(actions.clearIndividualFilter("priceRange"));
                   dispatch(actions.setFilteredList());
@@ -672,7 +561,7 @@ function HomePage() {
             <div className="param-item me-3">
               {selectedAreaRange} მ²
               <Xmark
-              style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(actions.clearIndividualFilter("areaRange"));
                   dispatch(actions.setFilteredList());
@@ -684,7 +573,7 @@ function HomePage() {
             <div className="param-item me-3">
               {selectedBedrooms}
               <Xmark
-              style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(actions.clearIndividualFilter("bedrooms"));
                   dispatch(actions.setFilteredList());
