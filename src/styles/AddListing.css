@@ -8,8 +8,25 @@
     background-color: #ffffff;
     border-color: #021526;
   }
-  .form-check-input:checked[type="radio"] {
-    --bs-form-check-bg-image: url(black-dot.svg);
+  .form-check-input {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #021526;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .form-check-input:checked::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #021526;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 .info-section {
